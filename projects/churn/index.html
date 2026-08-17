@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer churn prediction | Saurabh Upadhyay</title>
+<meta name="description" content="How a telecoms churn model on 50,000 customer records found that payment behaviour and tenure mattered more than the demographics the business had been segmenting by.">
+<link rel="canonical" href="https://srb1024.github.io/projects/churn/">
+<meta name="theme-color" content="#101E33">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://srb1024.github.io/projects/churn/">
+<meta property="og:title" content="Customer churn prediction | Saurabh Upadhyay">
+<meta property="og:description" content="The demographics barely mattered. Payment delinquency, short tenure and competitor pressure did.">
+<meta property="og:image" content="https://srb1024.github.io/assets/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESU%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="shell masthead__inner">
+    <a class="wordmark" href="/">Saurabh Upadhyay <span>/ Cork</span></a>
+    <nav aria-label="Sections">
+      <a href="/#work">Work</a>
+      <a href="/#background" data-optional>Background</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="case shell">
+
+    <a class="crumb" href="/#work">&larr; Selected work</a>
+
+    <p class="tag">Case study · 2025 · Group of five</p>
+    <h1>Customer churn prediction for a telecoms provider</h1>
+    <p class="case__lede">
+      A written account rather than a repository. The dataset belongs to University College Cork
+      and is not mine to redistribute, so the code stays private and the reasoning goes here.
+    </p>
+
+    <dl class="reframe">
+      <div>
+        <dt class="tag">Asked</dt>
+        <dd class="asked">Which customer segments are we losing?</dd>
+      </div>
+      <div>
+        <dt class="tag">Found</dt>
+        <dd class="found">The demographics the business had been segmenting by barely mattered. <b>Payment delinquency, short tenure and competitor pressure</b> did.</dd>
+      </div>
+    </dl>
+
+    <section class="case__section">
+      <h2>The brief</h2>
+      <p>
+        A telecoms operator was losing 26 percent of its customer base and wanted to know who was
+        leaving. The instinct in the brief was demographic: which age groups, which income tiers,
+        which regions. The job was to build a model that could flag customers at risk early enough
+        for a retention team to do something about it, and to say what was actually driving the
+        risk.
+      </p>
+    </section>
+
+    <section class="case__section">
+      <h2>The data, and why it is not here</h2>
+      <p>
+        50,000 customer records and 35 variables covering billing, tenure, service usage, support
+        contact and demographics. The class balance was 74 percent retained to 26 percent churned,
+        which is enough imbalance to matter for how you score a model but not enough to need
+        resampling.
+      </p>
+      <p>
+        The dataset is a teaching set supplied by UCC. It is not open data, so I have not published
+        it or the notebook that reads it. Everything below is method and result, which is the part
+        that transfers anyway.
+      </p>
+    </section>
+
+    <section class="case__section">
+      <h2>What I did</h2>
+
+      <h3>Preparation</h3>
+      <p>
+        The raw categorical fields were inconsistent, the same value recorded under several
+        spellings and cases. Standardising those and one-hot encoding the result gave 114 predictors.
+        I added two behavioural features that the raw data did not have: spend per month of tenure,
+        which separates a long-standing customer on a small plan from a new one on a large plan, and
+        recent engagement against historic activity, which catches a customer whose usage has
+        dropped before their bill does.
+      </p>
+
+      <h3>Model comparison</h3>
+      <p>
+        Six classifiers were compared on the same stratified 3-fold cross-validation, scored on
+        ROC-AUC rather than accuracy because with a 74 to 26 split a model that predicts "retained"
+        every time is already 74 percent accurate. XGBoost came out ahead at 84 percent accuracy and
+        86 percent precision on the held-out set. Precision was the metric the business needed,
+        because every flagged customer costs retention effort and a model that cries wolf gets
+        switched off.
+      </p>
+
+      <h3>Interpretability</h3>
+      <p>
+        A score on its own is not something a retention agent can act on. I applied SHAP for the
+        global picture and LIME for individual customers, so each flag arrives with its top reasons
+        attached. The SHAP summary was the finding: demographic variables such as income tier and
+        gender clustered near zero contribution, while billing and behavioural features carried the
+        model.
+      </p>
+
+      <!-- Optional. Export the SHAP summary bar plot from the notebook as PNG and drop it in
+           assets/img/churn-shap-summary.png. Hidden automatically if the file is missing. -->
+      <figure class="figure" data-optional-wrap>
+        <img src="/assets/img/churn-shap-summary.png" alt="SHAP summary bar chart showing billing and tenure features with the largest mean absolute SHAP values and demographic features near zero" loading="lazy" data-optional>
+        <figcaption>Global feature contribution from the tuned model. Demographic features sit at the bottom.</figcaption>
+      </figure>
+    </section>
+
+    <section class="case__section">
+      <h2>What came out</h2>
+      <p>
+        Three drivers dominated. Payment delinquency, whether a customer had missed or delayed
+        payments. Short tenure, with risk concentrated in the first six months. And competitor
+        pressure, customers who had been contacted by or had recently compared rival offers.
+        The demographic segments the business had been organising its retention effort around were
+        not where the risk was.
+      </p>
+      <div class="callout">
+        <p>
+          The useful output was not the model. It was the reordering of what the business thought
+          it already knew about its own customers.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <h2>What was recommended</h2>
+      <ul>
+        <li>Score customers continuously inside the CRM rather than in a quarterly batch, so the flag arrives while there is still time to act.</li>
+        <li>Incentivise auto-pay enrolment, since payment delinquency was the strongest single lever and it is one the business controls.</li>
+        <li>Concentrate retention effort in the first six months of tenure, where risk peaks and where a small intervention has the longest payoff.</li>
+        <li>Give retention agents the LIME explanation alongside the score, so the conversation starts from the customer's actual situation.</li>
+      </ul>
+    </section>
+
+    <section class="case__section">
+      <h2>Limitations</h2>
+      <p>
+        The data is a single snapshot, so the model finds association rather than cause. A customer
+        who misses payments may already have decided to leave, in which case auto-pay incentives
+        arrive too late for them and only help the next cohort. Testing that needs a time dimension
+        the dataset does not have. The recommendations were also never deployed, so their effect on
+        actual churn is untested. What is defensible is the ranking of drivers and the case for
+        continuous scoring over demographic segmentation.
+      </p>
+    </section>
+
+    <section class="case__section">
+      <h2>My part</h2>
+      <p>
+        Group of five. I owned the data preparation and feature engineering, ran the model
+        comparison and did the SHAP and LIME interpretability work. Teammates handled the
+        exploratory analysis and the written report.
+      </p>
+    </section>
+
+    <nav class="case__nav" aria-label="Case study navigation">
+      <a class="jump" href="/#work">&larr; Back to selected work</a>
+      <a class="jump" href="https://ie-transports-decarbonization-tracker.streamlit.app/" target="_blank" rel="noopener">See the live transport dashboard &rarr;</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="closing" id="contact">
+  <div class="shell">
+    <p class="tag" style="margin:0 0 1.5rem">Open to work</p>
+    <h2>Looking for Business Analyst roles in Ireland.</h2>
+    <p>
+      On Stamp 2 student permission and eligible for Stamp 1G on completion of the MSc, which
+      permits full time employment for up to 24 months. On-site, hybrid or remote.
+    </p>
+    <div class="actions">
+      <a class="btn" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
+      <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
+      <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
+    </div>
+    <div class="colophon">
+      <span>Cork, Ireland</span>
+      <span>Last updated August 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

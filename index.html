@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saurabh Upadhyay | Business Analyst, Cork</title>
+<meta name="description" content="Business analyst in Cork, Ireland. MSc Business Analytics at University College Cork, three and a half years in software delivery at Sage. Selected work in forecasting, churn modelling and requirements research.">
+<link rel="canonical" href="https://srb1024.github.io/">
+<meta name="theme-color" content="#101E33">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://srb1024.github.io/">
+<meta property="og:title" content="Saurabh Upadhyay | Business Analyst, Cork">
+<meta property="og:description" content="The problem as stated is rarely the real problem. Selected analytics and business analysis work.">
+<meta property="og:image" content="https://srb1024.github.io/assets/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- inline SVG favicon, saves a request and there's no .ico to keep track of -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESU%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#work">Skip to selected work</a>
+
+<header class="masthead">
+  <div class="shell masthead__inner">
+    <a class="wordmark" href="/">Saurabh Upadhyay <span>/ Cork</span></a>
+    <nav aria-label="Sections">
+      <a href="#work">Work</a>
+      <!-- data-optional drops this one on narrow screens, three items is crowded on a phone -->
+      <a href="#background" data-optional>Background</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero shell">
+    <p class="tag hero__eyebrow">Business analyst · Cork, Ireland</p>
+    <h1>The problem as stated is rarely the <em>real problem</em>.</h1>
+    <p class="hero__lede">
+      I'm <strong>Saurabh Upadhyay</strong>. Three and a half years in software delivery at Sage,
+      now finishing an MSc in Business Analytics at University College Cork. Most of my work is
+      finding out what was actually being asked, then putting a number on it.
+    </p>
+    <div class="actions">
+      <a class="btn btn--lead" href="https://ie-transports-decarbonization-tracker.streamlit.app/" target="_blank" rel="noopener">See a live dashboard <i>&rarr;</i></a>
+      <a class="btn" href="/Saurabh_Upadhyay_CV.pdf">Download CV <i>&darr;</i></a>
+      <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
+      <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
+    </div>
+  </section>
+
+  <section class="band" id="work">
+    <div class="shell">
+      <div class="band__head">
+        <h2>Selected work</h2>
+        <p>Four projects. In each one the brief turned out to be asking the wrong question.</p>
+      </div>
+
+      <div class="work">
+
+        <article class="entry">
+          <div class="entry__top">
+            <div>
+              <h3>Ireland Transport Decarbonisation Tracker</h3>
+              <p class="entry__role"><span class="tag">Role</span>Repository owner · Streamlit build · Data preprocessing and Forecasting notebooks</p>
+            </div>
+            <p class="tag">2026 · Group of seven</p>
+          </div>
+
+          <dl class="reframe">
+            <div>
+              <dt class="tag">Asked</dt>
+              <dd class="asked">Is Ireland on track for its 2030 transport targets?</dd>
+            </div>
+            <div>
+              <dt class="tag">Found</dt>
+              <dd class="found">No. EV uptake plateaus <b>18.4 points short</b>, which works out at 1,860 extra EV and hybrid registrations every month between now and 2030.</dd>
+            </div>
+          </dl>
+
+          <figure class="entry__shot" data-optional-wrap>
+            <img src="/assets/img/transport-dashboard.png" alt="The EV adoption page of the dashboard, showing the forecast plateau against the 2030 target" loading="lazy" data-optional>
+            <figcaption class="tag">EV adoption page of the live dashboard</figcaption>
+          </figure>
+
+          <p class="entry__body">
+            Nine official CSO and data.gov.ie datasets, roughly 300,000 rows, pulled into one governed
+            pipeline behind three composite KPIs. Forecasts run on Holt-Winters, SARIMA and logistic
+            growth, selected per series and reported with error rather than presented as certainties.
+          </p>
+          <p class="entry__body">
+            Built for policy analysts and local authority planners, so the hard part was making
+            forecasting output legible to people who will never open a notebook.
+          </p>
+          <ul class="chips">
+            <li>Python</li><li>pandas</li><li>statsmodels</li><li>Streamlit</li><li>Plotly</li><li>Git</li>
+          </ul>
+          <div class="entry__links">
+            <a class="jump" href="https://ie-transports-decarbonization-tracker.streamlit.app/" target="_blank" rel="noopener">Live dashboard &rarr;</a>
+            <a class="jump" href="https://github.com/srb1024/IE_TRANSPORTs_DECARBONISATION_TRACKER" target="_blank" rel="noopener">Source code &rarr;</a>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <div>
+              <h3>Customer churn prediction, telecoms</h3>
+              <p class="entry__role"><span class="tag">Role</span>Data preparation · Model comparison · Interpretability</p>
+            </div>
+            <p class="tag">2025 · Group of five</p>
+          </div>
+
+          <dl class="reframe">
+            <div>
+              <dt class="tag">Asked</dt>
+              <dd class="asked">Which customer segments are we losing?</dd>
+            </div>
+            <div>
+              <dt class="tag">Found</dt>
+              <dd class="found">The demographics the business had been segmenting by barely mattered. <b>Payment delinquency, short tenure and competitor pressure</b> did.</dd>
+            </div>
+          </dl>
+
+          <p class="entry__body">
+            50,000 customer records and 35 variables cleaned into 114 predictors. Six classifiers
+            compared, XGBoost selected at 84 percent accuracy and 86 percent precision. SHAP and LIME
+            applied so a flagged customer arrives with its reasons attached instead of a bare score,
+            which is the difference between a model and something a retention team can act on.
+          </p>
+          <p class="entry__body">
+            Recommendation was continuous scoring inside the CRM, auto-pay incentives and
+            intervention concentrated in the first six months of tenure.
+          </p>
+          <ul class="chips">
+            <li>Python</li><li>scikit-learn</li><li>XGBoost</li><li>SHAP</li><li>LIME</li>
+          </ul>
+          <div class="entry__links">
+            <a class="jump" href="/projects/churn/">Read the approach &rarr;</a>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <div>
+              <h3>Global supply chain optimisation</h3>
+              <p class="entry__role"><span class="tag">Role</span>Data preparation · MILP build · Cost analysis · Recommendations</p>
+            </div>
+            <p class="tag">2026 · Group of seven</p>
+          </div>
+
+          <dl class="reframe">
+          <div>
+          <dt class="tag">Asked</dt>
+          <dd class="asked">How much new capacity does the manufacturer need to build?</dd>
+          </div>
+          <div>
+          <dt class="tag">Found</dt>
+          <dd class="found">Less than they thought. <b>20,000 of the 35,000 unit monthly shortfall</b> could be covered by capacity already sitting idle, at a net saving of EUR 150 to 250 per unit.</dd>
+          </div>
+          </dl>
+
+          <p class="entry__body">
+            A mixed integer linear programme across seven decision variable classes, with shortest
+            path routing over a 15 node network, then stress tested with two-stage stochastic
+            programming and a 500 iteration Monte Carlo so the plan came with a range rather than
+            a single number.
+          </p>
+          <p class="entry__body">
+            The same model surfaced a 35,000 unit monthly capacity shortfall worth EUR 37.5M a year
+            in penalties, against 20,000 units of idle capacity that could be switched on at a net
+            saving of EUR 150 to 250 per unit.
+          </p>
+          <ul class="chips">
+            <li>Python</li><li>PuLP</li><li>NetworkX</li><li>SciPy</li><li>Monte Carlo</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <div>
+              <h3>Urban Moonlight, smart streetlighting</h3>
+              <p class="entry__role"><span class="tag">Role</span>Ideation lead · Prototype build · Testing framework</p>
+            </div>
+            <p class="tag">2025 · Group of six</p>
+          </div>
+
+          <dl class="reframe">
+            <div>
+              <dt class="tag">Asked</dt>
+              <dd class="asked">How do we light Cork's streets better after dark?</dd>
+            </div>
+            <div>
+              <dt class="tag">Found</dt>
+              <dd class="found">Visibility was not the barrier. <b>Fear of falling, and of being alone if you did</b>, was what kept elderly and disabled residents indoors. That turned a replacement project into a retrofit.</dd>
+            </div>
+          </dl>
+
+          <figure class="entry__shot" data-optional-wrap>
+            <img src="/assets/img/urban-moonlight.png" alt="Screens from the Urban Moonlight prototype showing the emergency call flow" loading="lazy" data-optional>
+            <figcaption class="tag">Emergency call flow from the working prototype</figcaption>
+          </figure>
+
+          <p class="entry__body">
+            Stakeholder interviews, empathy and journey mapping with the residents the scheme was
+            meant to serve. The requirements that came out of it were motion-activated lighting, an
+            emergency call function with a cancel countdown to prevent false alarms, voice and
+            braille accessibility panels and charging points.
+          </p>
+          <ul class="chips">
+            <li>User research</li><li>Journey mapping</li><li>Service blueprints</li><li>Figma</li>
+          </ul>
+          <div class="entry__links">
+            <a class="jump" href="https://earth-folk-30984861.figma.site/" target="_blank" rel="noopener">Open the prototype &rarr;</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="background">
+    <div class="shell">
+      <div class="band__head">
+        <h2>Before this</h2>
+        <p>Payroll, HR and accounting automation software.</p>
+      </div>
+      <div class="roles">
+        <div class="roles__side">
+          <figure class="portrait" data-optional-wrap>
+            <img src="/assets/img/portrait.jpg" alt="Saurabh Upadhyay" width="304" height="304" data-optional>
+          </figure>
+          <p class="tag">Sage · Mohali, India</p>
+          <h3>Software delivery</h3>
+          <div class="stint">
+            <p>Software Test Engineer</p>
+            <p class="tag">Oct 2023 to Jun 2025</p>
+          </div>
+          <div class="stint">
+            <p>Associate Software Test Engineer</p>
+            <p class="tag">Oct 2021 to Oct 2023</p>
+          </div>
+          <div class="stint">
+            <p>MSc Business Analytics</p>
+            <p class="tag">University College Cork · 2025 to 2026</p>
+          </div>
+        </div>
+        <div class="roles__main">
+          <p class="pivot">
+            I came to analysis from the delivery side. Three and a half years of watching requirements
+            arrive, get built and come back as defects is a good education in where the gap between
+            what was asked and what was needed tends to open. The MSc added the means to measure it.
+          </p>
+          <p>
+            At Sage I sat between product owners, developers and customer support across the Payroll
+            and HR release cycle. That meant turning customer issues and feature requests into
+            acceptance criteria a team could build against, and tracing recurring defects back to
+            root causes so the same ones stopped resurfacing.
+          </p>
+          <p>
+            I also built the Cypress automation suite from scratch and worked with a developer to
+            wire it into CI, and verified data integrity across APIs and back end services,
+            reconciling payroll calculations before they reached customers.
+          </p>
+          <p>
+            As project manager on a graduate process improvement project I interviewed stakeholders
+            across the delivery function, mapped how work actually moved through the SDLC rather than
+            how it was documented to move, and presented recommendations to senior leadership with a
+            projected reduction in turnaround time of around 20 percent.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="closing" id="contact">
+  <div class="shell">
+    <p class="tag" style="margin:0 0 1.5rem">Open to work</p>
+    <h2>Looking for Business Analyst roles in Ireland.</h2>
+    <p>
+      On Stamp 2 student permission and eligible for Stamp 1G on completion of the MSc, which
+      permits full time employment for up to 24 months. On-site, hybrid or remote.
+    </p>
+    <div class="actions">
+      <a class="btn" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
+      <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
+      <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
+    </div>
+    <div class="colophon">
+      <span>Cork, Ireland</span>
+      <span>Last updated August 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>
