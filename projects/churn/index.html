@@ -110,18 +110,14 @@
 
       <h3>Interpretability</h3>
       <p>
-        A score on its own is not something a retention agent can act on. I applied SHAP for the
-        global picture and LIME for individual customers, so each flag arrives with its top reasons
-        attached. The SHAP summary was the finding: demographic variables such as income tier and
-        gender clustered near zero contribution, while billing and behavioural features carried the
-        model.
+        A score on its own is not something a retention agent can act on. I applied SHAP and LIME so each flagged customer arrives with its top reasons attached, and cross-checked the pattern against the model's own feature importances. The finding held up either way: demographic variables such as income tier and gender did not make the top 15, while billing and behavioural features carried the model.
       </p>
 
       <!-- Optional. Export the SHAP summary bar plot from the notebook as PNG and drop it in
            assets/img/churn-shap-summary.png. Hidden automatically if the file is missing. -->
       <figure class="figure" data-optional-wrap>
-        <img src="/assets/img/churn-shap-summary.png" alt="SHAP summary bar chart showing billing and tenure features with the largest mean absolute SHAP values and demographic features near zero" loading="lazy" data-optional>
-        <figcaption>Global feature contribution from the tuned model. Demographic features sit at the bottom.</figcaption>
+      <img src="/assets/img/churn-xgboost-importance.png" alt="XGBoost feature importance ranking, topped by payment delinquency status, with no demographic feature in the top 15" loading="lazy" data-optional>
+      <figcaption>XGBoost's own feature ranking. Demographics do not appear in the top 15.</figcaption>
       </figure>
     </section>
 

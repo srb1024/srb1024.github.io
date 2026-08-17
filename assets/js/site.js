@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  /* ---- 1. Reveal ---------------------------------------------- */
+  /* 1. Reveal */
   var entries = document.querySelectorAll('.entry');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -25,7 +25,7 @@
     entries.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---- 2. Optional images ------------------------------------- */
+  /* 2. Optional images*/
   function hideWrap(img) {
     var wrap = img.closest('[data-optional-wrap]') || img;
     wrap.hidden = true;
