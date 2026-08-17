@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://srb1024.github.io/sitemap.xml
