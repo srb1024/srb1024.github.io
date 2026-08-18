@@ -16,7 +16,7 @@
   var VERSION = 2;
   var ROOT = document.documentElement;
 
-  /* ---- colour helpers ------------------------------------------ */
+  /*  colour helpers  */
   function rgbToHsl(r, g, b) {
     r /= 255; g /= 255; b /= 255;
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -63,7 +63,7 @@
   }
   function triplet(rgb) { return rgb.join(','); }
 
-  /* ---- apply and cache ----------------------------------------- */
+  /*  apply and cache  */
   function apply(vars) {
     for (var k in vars) {
       if (Object.prototype.hasOwnProperty.call(vars, k)) {
@@ -72,7 +72,7 @@
     }
   }
 
-  /* ---- read the photograph ------------------------------------- */
+  /*  read the photograph  */
   function sample(img) {
     var W = 200;
     var H = Math.max(1, Math.round(img.naturalHeight * W / img.naturalWidth));
@@ -82,7 +82,7 @@
     ctx.drawImage(img, 0, 0, W, H);
     var px = ctx.getImageData(0, 0, W, H).data;
 
-    var BUCKETS = 36;                 /* 10 degrees each */
+    var BUCKETS = 36;                 
     var weight = new Array(BUCKETS).fill(0);
     var hSum = new Array(BUCKETS).fill(0);
     var sSum = new Array(BUCKETS).fill(0);
@@ -126,8 +126,6 @@
     var qh = q >= 0 ? hSum[q] / weight[q] : (ph + 42);
     var qs = q >= 0 ? Math.max(0.40, Math.min(0.80, sSum[q] / weight[q])) : ps * 0.8;
 
-    /* Link colour has to stay readable on the dark glass, so lift it until
-       it clears 4.5:1 rather than trusting the photograph to be kind. */
     var card = [16, 21, 30];
     var signal = hslToRgb(ph, ps * 0.78, 0.70);
     for (var L = 0.70; L <= 0.93 && contrast(signal, card) < 4.5; L += 0.02) {
@@ -140,10 +138,6 @@
     var bright = hslToRgb(ph, ps, 0.62);
     var second = hslToRgb(qh, qs * 0.78, 0.64);
 
-    /* The bright end of the photograph, not its average: a mostly dark image
-       with one hot spot still needs a veil where the text lands. Solve for
-       the veil that pulls that brightness down to where white text clears
-       4.5:1, and use no more than that. */
     var acc = 0, bright = 1;
     for (var k = 0; k < 100; k++) {
       acc += hist[k];
@@ -173,7 +167,7 @@
     };
   }
 
-  /* ---- run ------------------------------------------------------ */
+  /*  run  */
   function url() {
     var v = getComputedStyle(ROOT).getPropertyValue('--bg-src').trim();
     var m = v.match(/url\((['"]?)(.*?)\1\)/);

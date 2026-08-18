@@ -1,24 +1,4 @@
-/* srb1024.github.io : site behaviour
-
-   Everything here ties motion to scroll position rather than to time.
-   1. The page head (home hero or case study intro) recedes as you
-      scroll away from it (--hx).
-   2. Cards pin under the masthead and pass over one another. Four
-      variables per card, all 0 to 1: --enter (arriving), --cover
-      (being covered by the next card), --fade (the next card is about
-      to be fully in place, so this card disappears behind it) and
-      --exit (last card only: it fades out during its final hold, then
-      the stack releases). Only on wide screens, and only if every card
-      fits on screen. Otherwise cards stack.
-   2b. Arriving with a #hash that names a card scrolls so that card is
-      the one pinned and visible, which is how "Back to selected work"
-      returns you to the card you left from.
-   3. Masthead gains a shadow once scrolled.
-   4. Minor elements get a one-shot reveal.
-   5. Optional images hide if the file is missing.
-   6. Images inside cards open in a lightbox on click, sized from the
-      file's own pixels so nothing is stretched into softness.
-   No dependencies. With scripts off you get a plain, fully visible page. */
+/* srb1024.github.io : site behaviour*/
 (function () {
   'use strict';
 
@@ -51,7 +31,7 @@
     return y;
   }
 
-  /* ---- Decide whether the pinned stack is on ------------------- */
+  /* Decide whether the pinned stack is on */
   function evaluateStack() {
     if (!work || entries.length < 2) { return; }
     var want = !reduce && wide.matches;
@@ -92,7 +72,7 @@
     requestTick();
   }
 
-  /* ---- Land on a card named in the URL hash -------------------- */
+  /* Land on a card named in the URL hash */
   /* Layout settles in stages (fonts, images), so landing is repeated on each
      re-evaluation until the user touches the page or the page has been loaded
      for a moment. After that it never yanks the scroll position again. */
@@ -110,8 +90,6 @@
     var i = entries.indexOf(target);
     if (i === -1) { return; }
     if (stacked) {
-      /* Scroll so this card has just pinned: fully entered, and every card
-         before it fully behind and hidden. */
       var y = flowTop(target) - (pinTop() + i * STAGGER);
       window.scrollTo(0, Math.max(0, y));
     } else {
@@ -122,7 +100,7 @@
     hashLock = false; landOnHash(); hashLock = true;
   });
 
-  /* ---- Per-frame scroll work ----------------------------------- */
+  /*  Per-frame scroll work */
   var ticking = false;
   function tick() {
     ticking = false;
@@ -142,8 +120,6 @@
       var tops = [];
       var i, el, h, vis;
 
-      /* Visual top of each card: pinned when its flow position passes the pin,
-         released again when the container's bottom edge arrives. */
       for (i = 0; i < entries.length; i++) {
         el = entries[i];
         h = el.offsetHeight;
@@ -161,14 +137,9 @@
 
         if (i < lastIdx) {
           cover = clamp01((t.top + t.h - tops[i + 1].top) / Math.max(1, t.h));
-          /* Distance the next card still has to travel to reach its pin.
-             0 means it is fully in place, so this card's contents are gone. */
           var remaining = tops[i + 1].top - (pin + (i + 1) * STAGGER);
           fade = clamp01(1 - remaining / FADE_PX);
         } else if (dwellPx > 0) {
-          /* Last card: how much of its final hold is used up. The container's
-             bottom edge closes on the card's bottom; when it arrives the card
-             is released, and by then it should be gone. */
           var slack = workEnd - (t.top + t.h);
           exit = clamp01(1 - slack / dwellPx);
         }
@@ -186,7 +157,7 @@
   }
   window.addEventListener('scroll', requestTick, { passive: true });
 
-  /* ---- Re-evaluate when sizes change --------------------------- */
+  /* Re-evaluate when sizes change */
   var resizeRaf = 0;
   function onResize() {
     if (resizeRaf) { return; }
@@ -201,7 +172,7 @@
   }
   window.addEventListener('load', onResize);
 
-  /* ---- One-shot reveal for minor elements ---------------------- */
+  /* One-shot reveal for minor elements  */
   evaluateStack();   /* must run first so cards know whether they're scroll-linked */
 
   var targets = Array.prototype.slice.call(document.querySelectorAll(
@@ -225,7 +196,7 @@
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---- Optional images ----------------------------------------- */
+  /*  Optional images  */
   function hideWrap(img) {
     var wrap = img.closest('[data-optional-wrap]') || img;
     wrap.hidden = true;
@@ -236,7 +207,7 @@
   });
 
 
-  /* ---- 6. Lightbox for card images ---------------------------- */
+  /* Lightbox for card images */
   (function () {
     var zoomables = Array.prototype.slice.call(
       document.querySelectorAll('.entry__shot img, .figure img')

@@ -1,21 +1,6 @@
-/* ===============================================================
-   srb1024.github.io : site stylesheet
-   One file, no build step. Tokens at the top, sections below.
+/* srb1024.github.io : site stylesheet */
 
-   Dark, built around a single fixed photograph. Everything on it is
-   dark frosted glass so text stays legible wherever the highlights
-   fall. The accent colours are read out of the photograph at load
-   time by theme.js, so swapping the image retunes the whole site.
-
-   Motion is tied to scroll, not to time. Card stacks pin under the
-   masthead and pass over one another, and each card disappears once
-   the next is in place; site.js drives them with four variables per
-   card (--enter, --cover, --fade, --exit).
-   =============================================================== */
-
-/* ---------------------------------------------------------------
-   Tokens
-   --------------------------------------------------------------- */
+/* Tokens */
 :root{
   color-scheme:dark;
 
@@ -74,11 +59,9 @@
   --rhythm:clamp(4rem,9vw,7.5rem);
 }
 
-/* ---------------------------------------------------------------
-   Base and the photograph
-   The image sits on a fixed pseudo-element rather than as a fixed
-   background, because iOS ignores background-attachment: fixed.
-   --------------------------------------------------------------- */
+  /*Base and the photograph
+  The image sits on a fixed pseudo-element rather than as a fixed
+  background, because iOS ignores background-attachment: fixed. */
 *,*::before,*::after{box-sizing:border-box}
 html{
   -webkit-text-size-adjust:100%;
@@ -138,10 +121,7 @@ a{color:inherit}
   color:var(--slate);
 }
 
-/* ---------------------------------------------------------------
-   Motion primitives
-   .reveal is added by site.js, so with scripts off nothing hides.
-   --------------------------------------------------------------- */
+/* Motion */
 @keyframes rise{
   from{opacity:0;transform:translateY(18px)}
   to{opacity:1;transform:none}
@@ -164,9 +144,7 @@ a{color:inherit}
 .hero .actions,.case__head > .case__lede{animation-delay:.42s}
 .case__head > .reframe{animation-delay:.55s}
 
-/* ---------------------------------------------------------------
-   Masthead: dark glass bar
-   --------------------------------------------------------------- */
+/* Masthead */
 .masthead{
   position:sticky;top:0;z-index:20;
   background:rgba(8,10,15,.45);
@@ -202,11 +180,7 @@ a{color:inherit}
   .masthead nav a[data-optional]{display:none}
 }
 
-/* ---------------------------------------------------------------
-   Page heads: the home hero and the case study intro.
-   Both rise on load, then recede as you scroll away:
-   --hx runs 0 to 1, set by site.js.
-   --------------------------------------------------------------- */
+/* Page heads */
 .hero,.case__head{
   transform-origin:50% 0;
   transform:translateY(calc(var(--hx,0) * -56px)) scale(calc(1 - var(--hx,0) * .04));
@@ -274,11 +248,7 @@ a{color:inherit}
 .hero__lede strong{font-weight:600;color:var(--ink)}
 .case__head .reframe{margin:clamp(2rem,5vw,3rem) 0 0;max-width:var(--prose)}
 
-/* ---------------------------------------------------------------
-   Buttons: pills in the sphere's blue. Two weights: the lead is a
-   solid gradient, the rest are blue-tinted glass. Same everywhere,
-   home, case pages and footer.
-   --------------------------------------------------------------- */
+/* Buttons */
 .actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:clamp(2rem,5vw,2.75rem)}
 .btn{
   display:inline-flex;align-items:center;gap:.55rem;
@@ -331,9 +301,7 @@ a{color:inherit}
 }
 .crumb:hover{background:rgba(var(--blue-rgb),.30);border-color:rgba(var(--blue-rim-rgb),.7);transform:translateY(-1px)}
 
-/* ---------------------------------------------------------------
-   Section frame
-   --------------------------------------------------------------- */
+/* Section frame */
 .band{padding-block:var(--rhythm);border-top:1px solid var(--line)}
 .band__head{
   display:flex;align-items:baseline;justify-content:space-between;
@@ -352,10 +320,7 @@ a{color:inherit}
 }
 .case__body{border-top:1px solid var(--line);padding-block:0 var(--rhythm)}
 
-/* ---------------------------------------------------------------
-   Cards: dark glass. Used for projects on the home page and for
-   sections on the case study pages.
-   --------------------------------------------------------------- */
+/* Cards */
 .work{display:flex;flex-direction:column;gap:clamp(1.25rem,3vw,1.75rem)}
 
 .entry{
@@ -406,7 +371,7 @@ a{color:inherit}
 }
 @media (max-width:560px){.reframe > div{grid-template-columns:1fr;gap:.2rem}}
 
-/* Optional screenshot. Hidden by site.js if the file is missing. */
+/* Optional screenshot */
 .entry__shot{
   margin:0 0 1.6rem;
   border:1px solid rgba(255,255,255,.12);
@@ -459,19 +424,7 @@ a{color:inherit}
 .jump:hover{border-bottom-color:var(--signal)}
 .entry__note{font-family:var(--mono);font-size:.72rem;color:var(--slate-light);margin-top:1.5rem}
 
-/* ---------------------------------------------------------------
-   Pinned stack. site.js adds .is-stacked when the viewport is wide
-   enough and every card fits on screen. Each card sticks just under
-   the masthead; the next one slides up over it. Four variables per
-   card, all 0 to 1, set by site.js:
-     --enter  travel from the bottom edge to the pin (rise and fade in)
-     --cover  how much of this card the next one has covered (recede)
-     --fade   the next card is about to be fully in place; this card
-              fades out behind it, glass and all
-     --exit   last card only: it fades out during its final hold before
-              the stack releases
-   Below 900px, or if anything doesn't fit, cards simply stack in flow.
-   --------------------------------------------------------------- */
+/* Pinned stack */
 .work.is-stacked{gap:26vh}
 .work--case.is-stacked{gap:16vh}
 .work.is-stacked .entry:last-child{margin-bottom:22vh}
@@ -512,9 +465,7 @@ a{color:inherit}
   }
 }
 
-/* ---------------------------------------------------------------
-   Background / experience
-   --------------------------------------------------------------- */
+/* Background / experience */
 .roles{display:grid;grid-template-columns:minmax(0,20rem) minmax(0,1fr);gap:clamp(1.5rem,5vw,4rem)}
 @media (max-width:820px){.roles{grid-template-columns:1fr;gap:1.75rem}}
 
@@ -529,18 +480,13 @@ a{color:inherit}
 .roles__main p + p{margin-top:1rem}
 .roles__main .pivot{color:var(--ink);font-size:1.06em}
 
-/* ---------------------------------------------------------------
-   Case study end: cross links as buttons
-   --------------------------------------------------------------- */
+/* Case study end */
 .case__nav{
   margin-top:clamp(2rem,5vw,3rem);padding-top:1.5rem;border-top:1px solid var(--line);
   display:flex;flex-wrap:wrap;gap:.75rem;
 }
 
-/* ---------------------------------------------------------------
-   Contact / closing: a full-width band of deeper glass, so the
-   photograph carries on underneath but the section reads as an end
-   --------------------------------------------------------------- */
+/* Contact / closing */
 .closing{
   padding-block:var(--rhythm);
   background:
@@ -565,11 +511,7 @@ a{color:inherit}
   display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between;
 }
 
-/* ---------------------------------------------------------------
-   Lightbox. Any image inside a card opens enlarged on click.
-   site.js sizes it from the file's own pixel dimensions, so nothing
-   is stretched past the point where it would start to look soft.
-   --------------------------------------------------------------- */
+/* Lightbox */
 .entry__shot img,.figure img{cursor:zoom-in}
 .entry__shot img:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
@@ -618,16 +560,12 @@ a{color:inherit}
   .lightbox__figure{transform:none}
 }
 
-/* ---------------------------------------------------------------
-   Phones: lighter blur, they pay for every pixel of it
-   --------------------------------------------------------------- */
+/* Phones */
 @media (max-width:640px){
   :root{--glass-blur:16px}
 }
 
-/* ---------------------------------------------------------------
-   Fallbacks: no backdrop-filter, or the OS asks for less transparency
-   --------------------------------------------------------------- */
+/* Fallbacks */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .masthead{background:rgba(8,10,15,.94)}
   .entry{background:rgba(14,18,26,.94)}
@@ -641,9 +579,7 @@ a{color:inherit}
   .closing{background:#07090E;-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 
-/* ---------------------------------------------------------------
-   Reduced motion: everything settles instantly, nothing pins
-   --------------------------------------------------------------- */
+/* Reduced motion */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
