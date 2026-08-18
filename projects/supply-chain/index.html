@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global supply chain optimisation | Saurabh Upadhyay</title>
+<meta name="description" content="A mixed integer linear programme for a perfume supply chain that turned a capacity question into a switch-on-what-you-have answer: 20,000 idle units before any expansion.">
+<link rel="canonical" href="https://srb1024.github.io/projects/supply-chain/">
+<meta name="theme-color" content="#05070B">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://srb1024.github.io/projects/supply-chain/">
+<meta property="og:title" content="Global supply chain optimisation | Saurabh Upadhyay">
+<meta property="og:description" content="Less than they thought. 20,000 of the 35,000 unit shortfall was capacity already sitting idle.">
+<meta property="og:image" content="https://srb1024.github.io/assets/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESU%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="shell masthead__inner">
+    <a class="wordmark" href="/">Saurabh Upadhyay</a>
+    <nav aria-label="Sections">
+      <a href="/#work">Work</a>
+      <a href="/#background" data-optional>Background</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="case__head shell">
+    <a class="crumb" href="/#project-supply-chain">&larr; Selected work</a>
+    <p class="tag">Case study · 2026 · Group project</p>
+    <h1>Global supply chain optimisation for a perfume manufacturer</h1>
+    <p class="case__lede">
+      A written account rather than a repository. The parameter tables behind the model are
+      University College Cork teaching material and are not mine to redistribute, so the code
+      stays private and the reasoning goes here.
+    </p>
+    <dl class="reframe">
+      <div>
+        <dt class="tag">Asked</dt>
+        <dd class="asked">How much new capacity does the manufacturer need to build?</dd>
+      </div>
+      <div>
+        <dt class="tag">Found</dt>
+        <dd class="found">Less than they thought. <b>20,000 of the 35,000 unit monthly shortfall</b> could be covered by capacity already sitting idle, at a net saving of EUR 150 to 250 per unit.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="case__body">
+    <div class="shell">
+      <div class="work work--case">
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>The brief</h3>
+            <p class="tag">01 / 08</p>
+          </div>
+          <!-- Optional. Hidden automatically if the file is missing. -->
+          <figure class="entry__shot" data-optional-wrap>
+            <img src="/assets/img/sc-capacity-vs-demand.png" alt="Bar chart of monthly demand at 275,000 units against the three factories and two warehouses, all below it" loading="lazy" data-optional>
+            <figcaption class="tag">Demand against factory and warehouse capacity</figcaption>
+          </figure>
+          <p class="entry__body">
+            Groupe Elegance makes perfume through four suppliers, three factories in France, two
+            warehouses and six markets from Paris to Shanghai. Monthly demand is 275,000 units against
+            240,000 units of factory capacity, so some demand goes unmet whatever the plan. The brief
+            was one optimisation covering sourcing, production, workforce, warehousing and distribution
+            that balanced cost, service, reliability and emissions, and said what to do about the gap.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>The data, and why it is not here</h3>
+            <p class="tag">02 / 08</p>
+          </div>
+          <p class="entry__body">
+            Nine parameter tables supplied with the module: supplier prices, capacities and delivery
+            variance; factory capacities, unit costs and emissions; staffing costs and absenteeism;
+            market demand, urgency and penalty rates; warehouse capacity and storage cost; transport
+            cost, time and emissions by mode; distances; product recipes; and the transport network.
+          </p>
+          <p class="entry__body">
+            They are UCC teaching material, not open data, so neither the tables nor the notebook that
+            reads them are published. What follows is method and result.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>Preparation</h3>
+            <p class="tag">03 / 08</p>
+          </div>
+          <p class="entry__body">
+            The tables arrived as nine separate exhibits. I consolidated them into one workbook and
+            loaded that into Python as the model's parameters, so every coefficient in the objective and
+            every constraint bound traced back to a named cell and a change in an assumption was a
+            change in one place.
+          </p>
+          <p class="entry__body">
+            The recipes were the fiddly part: product formulas in grams and millilitres per unit against
+            supplier capacity in kilograms, reconciled so the material balance constraint would hold
+            without a hidden unit error.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>The model</h3>
+            <p class="tag">04 / 08</p>
+          </div>
+          <p class="entry__body">
+            A mixed integer linear programme in PuLP. Seven classes of decision variable: kilograms
+            bought from each supplier, units of each product made at each factory, a binary switch per
+            factory, integer staff per role, inventory per warehouse, units shipped per warehouse, market
+            and mode, and unmet demand per market.
+          </p>
+          <p class="entry__body">
+            The objective minimises eight cost components: procurement, fixed and variable production,
+            labour, storage, transport, a carbon charge of EUR 0.05 per kg CO2, and unmet demand
+            penalties weighted by market urgency. Constraints cover supplier capacity, factory capacity,
+            material balance from the recipes, workforce net of absenteeism, warehouse capacity and
+            demand with slack.
+          </p>
+          <div class="callout">
+            <p>
+              The binary factory variables are the reason it is a MILP rather than an LP. Without them a
+              plant could be a fraction open and pay a fraction of its fixed cost, which no plant does.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>What came out</h3>
+            <p class="tag">05 / 08</p>
+          </div>
+          <!-- Optional. Hidden automatically if the file is missing. -->
+          <figure class="entry__shot" data-optional-wrap>
+            <img src="/assets/img/sc-fulfilment-by-city.png" alt="Fulfilment rate by city: New York, Paris, Shanghai and Tokyo at 100 percent, Milan at 28.6 percent, Dubai at zero" loading="lazy" data-optional>
+            <figcaption class="tag">Fulfilment by market in the optimal plan</figcaption>
+          </figure>
+          <p class="entry__body">
+            An optimal cost of EUR 81.4M. Transport was 49 percent of it and unmet demand penalties 46
+            percent; everything else together was under 5 percent. All three factories run, producing
+            220,000 units and meeting 80 percent of demand.
+          </p>
+          <p class="entry__body">
+            The solver serves the high urgency markets in full, New York, Paris, Tokyo and Shanghai, and
+            lets Milan and Dubai absorb the shortfall because their penalties are lowest. It also makes
+            only Product C, the least material-intensive recipe, to get the most units out of constrained
+            inputs.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>Cost and capacity</h3>
+            <p class="tag">06 / 08</p>
+          </div>
+          <!-- Optional. Hidden automatically if the file is missing. -->
+          <figure class="entry__shot" data-optional-wrap>
+            <img src="/assets/img/sc-cost-breakdown.png" alt="Bar chart of the optimal cost breakdown, dominated by transport and unmet demand penalties" loading="lazy" data-optional>
+            <figcaption class="tag">Where the EUR 81.4M goes</figcaption>
+          </figure>
+          <p class="entry__body">
+            The shadow prices said where the constraint actually was. Grasse and Lyon were at capacity
+            with zero slack. Raw material constraints had full slack, so supply was not the problem.
+            Bordeaux was running at 70,000 of 90,000 units, which left 20,000 units of built capacity
+            doing nothing.
+          </p>
+          <p class="entry__body">
+            Left as it was, the shortfall costs EUR 37.5M a year in unmet demand penalties. Each unit
+            added at Bordeaux was worth EUR 150 to 250 in penalty avoided, net of production and
+            transport cost. That is the number that turned "how much do we build" into "switch on what
+            you have first".
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>What was recommended</h3>
+            <p class="tag">07 / 08</p>
+          </div>
+          <!-- Optional. Hidden automatically if the file is missing. -->
+          <figure class="entry__shot" data-optional-wrap>
+            <img src="/assets/img/sc-factory-comparison.png" alt="Factory comparison across maximum output, CO2 per unit, energy per unit and variable cost, with Bordeaux highest capacity and lowest emissions" loading="lazy" data-optional>
+            <figcaption class="tag">The three factories compared. Bordeaux has the room and the best emissions profile</figcaption>
+          </figure>
+          <ul class="entry__list">
+            <li>Activate Bordeaux's idle 20,000 units first, with the workforce to run them, and treat new capacity as the second decision rather than the first.</li>
+            <li>Buy from EthanolPro and LuxeCap first. Hold Capella, the costliest and most volatile supplier, to the minimum the product mix needs, and carry a two-month buffer of rare extracts.</li>
+            <li>Route by urgency: air for New York and Tokyo, sea from Marseille for Milan and Dubai.</li>
+            <li>Keep the EUR 0.05 per kg carbon charge as the operating default and stress test hard emission caps quarterly rather than living under one.</li>
+          </ul>
+        </article>
+
+        <article class="entry">
+          <div class="entry__top">
+            <h3>Limitations, and my part</h3>
+            <p class="tag">08 / 08</p>
+          </div>
+          <p class="entry__body">
+            The core model is single-period and deterministic: one month, known demand. Teammates
+            extended it with a two-stage stochastic version and a 500 iteration Monte Carlo, which is
+            where the plan gets its range. The optimised plan produces 220,000 units, which is also the
+            combined warehouse capacity, so any expansion case should confirm warehousing does not
+            become the next constraint. And the recommendations were coursework, never implemented.
+          </p>
+          <p class="entry__body">
+            <b>My part.</b> Group project. I prepared the data, built the MILP, did the cost and capacity
+            analysis and wrote the recommendations. Teammates built the routing layer with Dijkstra in
+            NetworkX, the two-stage stochastic model and the Monte Carlo simulation. The 82 percent cut
+            in modelled CO2 against an all-air baseline, largely from moving non-urgent lanes to sea, is
+            theirs.
+          </p>
+        </article>
+
+      </div>
+
+      <nav class="case__nav" aria-label="Case study navigation">
+        <a class="btn" href="/#project-supply-chain">&larr; Back to selected work</a>
+      </nav>
+    </div>
+  </section>
+
+</main>
+
+<footer class="closing" id="contact">
+  <div class="shell">
+    <p class="tag" style="margin:0 0 1.5rem">Open to work</p>
+    <h2>Looking for Business Analyst roles in Ireland.</h2>
+    <p>
+      On Stamp 2 student permission and eligible for Stamp 1G on completion of the MSc, which
+      permits full time employment for up to 24 months. On-site, hybrid or remote.
+    </p>
+    <div class="actions">
+      <a class="btn" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
+      <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
+      <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
+    </div>
+    <div class="colophon">
+      <span>&copy; 2026 Saurabh Upadhyay</span>
+      <span>Last updated August 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>
