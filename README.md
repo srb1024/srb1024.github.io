@@ -13,8 +13,7 @@ JavaScript. No framework, no build step, no tracking.
 1. **Everything visual lives in `assets/css/site.css`.** Colours, spacing and
    shape are CSS variables at the top of the file. Change them there, nowhere else.
 
-2. **The background is one fixed photograph.** The blues throughout are sampled
-   from it, so swapping `assets/img/bg.jpg` means retuning the tokens to match.
+2. **The background is one fixed photograph , and it sets the palette.** theme.js samples it on load and writes the accent colours, so swapping assets/img/bg.jpg retunes the whole site by itself.
 
 3. **Click any chart to enlarge it.** It sizes from the file's own pixels and
    stops before it goes soft, so small exports stay small. Re-export bigger instead.
