@@ -339,9 +339,10 @@ a{color:inherit}
 }
 
 .entry__top{
-  display:flex;flex-wrap:wrap;align-items:baseline;
-  justify-content:space-between;gap:.5rem 1.5rem;margin-bottom:1.5rem;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  align-items:baseline;gap:.5rem 1.5rem;margin-bottom:1.5rem;
 }
+@media (max-width:560px){.entry__top{grid-template-columns:minmax(0,1fr)}}
 .entry__top h3{
   font-family:var(--display);font-weight:600;
   font-size:clamp(1.2rem,1.05rem + .55vw,1.5rem);
@@ -481,8 +482,9 @@ a{color:inherit}
     align-items:start;
   }
   .work.is-stacked .entry:has(.entry__shot) > :not(.entry__shot){grid-column:1}
+  .work.is-stacked .entry:has(.entry__shot) > .entry__top{grid-column:1 / -1}
   .work.is-stacked .entry:has(.entry__shot) > .entry__shot{
-    grid-column:2;grid-row:1 / span 10;align-self:center;margin:0;
+    grid-column:2;grid-row:2 / span 10;align-self:center;margin:0;
   }
 
   /* Wider text column: the screenshots are short, and a narrow column is what
