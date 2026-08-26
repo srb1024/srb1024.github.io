@@ -109,10 +109,19 @@ a{color:inherit}
 
 .tag{
   font-family:var(--mono);
-  font-size:.688rem;
+  font-size:.588rem;
   font-weight:500;
   letter-spacing:.14em;
   text-transform:uppercase;
+  color:var(--slate);
+}
+
+.tag2{
+  font-family:var(--mono);
+  font-size:.588rem;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:capitalize;
   color:var(--slate);
 }
 
@@ -291,7 +300,7 @@ a{color:inherit}
 }
 .crumb:hover{background:rgba(var(--blue-rgb),.30);border-color:rgba(var(--blue-rim-rgb),.7);transform:translateY(-1px)}
 
-.band{padding-block:var(--rhythm);border-top:1px solid var(--line)}
+.band{padding-block:var(--rhythm)}
 .band__head{
   display:flex;align-items:baseline;justify-content:space-between;
   gap:1.5rem;margin-bottom:clamp(2.25rem,5vw,3.25rem);
@@ -308,6 +317,7 @@ a{color:inherit}
   .band__head p{text-align:left}
 }
 .case__body{border-top:1px solid var(--line);padding-block:0 var(--rhythm)}
+.band:has(.work.is-stacked){padding-bottom:0}
 
 .work{display:flex;flex-direction:column;gap:clamp(1.25rem,3vw,1.75rem)}
 
@@ -513,14 +523,18 @@ a{color:inherit}
 
 .stint{
   position:relative;margin-top:1.15rem;padding-top:1.05rem;padding-left:1.15rem;
-  border-top:1px solid var(--line);
 
   --dot-y:calc(1.05rem + .15rem + .81 * .95rem);
 }
+.stint::after{
+  content:"";position:absolute;top:0;left:1.15rem;right:.85rem;height:1px;
+  background:var(--line);
+}
 .stint:first-of-type{
-  border-top:0;margin-top:.5rem;padding-top:0;
+  margin-top:.5rem;padding-top:0;
   --dot-y:calc(.15rem + .81 * .95rem);
 }
+.stint:first-of-type::after{display:none}
 
 /* Rail down to the next marker: the gap, that entry's padding, then half its
    title's line box. */

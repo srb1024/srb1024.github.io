@@ -69,7 +69,14 @@
 
     if (want) {
       var last = entries[entries.length - 1];
-      dwellPx = parseFloat(getComputedStyle(last).marginBottom) || 0;
+      var band = work.closest('.band');
+      var bandPad = band ? parseFloat(getComputedStyle(band).paddingBottom) || 0 : 0;
+      dwellPx = Math.round(pinTop() + (entries.length - 1) * STAGGER + last.offsetHeight);
+      last.style.marginBottom = dwellPx + 'px';
+      work.style.marginBottom = '-' + Math.round(dwellPx + bandPad) + 'px';
+    } else {
+      work.style.removeProperty('margin-bottom');
+      entries[entries.length - 1].style.removeProperty('margin-bottom');
     }
 
     if (want !== stacked) {
