@@ -15,16 +15,17 @@
 <meta property="og:image" content="https://srb1024.github.io/assets/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESU%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESRB%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
-<!-- Applies the cached palette before first paint, so a return visit never
-     flashes the fallback colours. theme.js refreshes it in the background. -->
+
+<!-- Applies the cached palette before first paint so a return visit never
+     flashes the fallback colours. theme.js refreshes it after load. -->
 <script>
-(function(){try{var k='palette:1:'+getComputedStyle(document.documentElement).getPropertyValue('--bg-src').trim().replace(/url\((['"]?)(.*?)\1\)/,'$2');var v=localStorage.getItem(k);if(v){v=JSON.parse(v);for(var n in v){document.documentElement.style.setProperty(n,v[n]);}}}catch(e){}})();
+(function(){try{var k='palette:2:'+getComputedStyle(document.documentElement).getPropertyValue('--bg-src').trim().replace(/url\((['"]?)(.*?)\1\)/,'$2');var v=localStorage.getItem(k);if(v){v=JSON.parse(v);for(var n in v){document.documentElement.style.setProperty(n,v[n]);}}}catch(e){}})();
 </script>
 <script src="/assets/js/theme.js" defer></script>
 </head>
@@ -87,6 +88,8 @@
             <h3>The data, and why it is not here</h3>
             <p class="tag">02 / 08</p>
           </div>
+
+          <!-- Hides itself until the file is in place, see site.js -->
           <figure class="entry__shot" data-optional-wrap>
             <img src="/assets/img/churn-class-balance.png" alt="Bar chart of the cleaned dataset: about 37,000 retained customers against about 13,000 churned" loading="lazy" data-optional>
             <figcaption class="tag">Class balance after cleaning, 74 to 26</figcaption>
@@ -126,6 +129,7 @@
             <h3>Model comparison</h3>
             <p class="tag">04 / 08</p>
           </div>
+
           <figure class="entry__shot" data-optional-wrap>
             <img src="/assets/img/churn-xgboost-confusion-roc.png" alt="XGBoost confusion matrix and ROC curve on the held-out set" loading="lazy" data-optional>
             <figcaption class="tag">XGBoost on the held-out set: confusion matrix and ROC</figcaption>
@@ -147,6 +151,7 @@
             <h3>Interpretability</h3>
             <p class="tag">05 / 08</p>
           </div>
+
           <figure class="entry__shot" data-optional-wrap>
             <img src="/assets/img/churn-xgboost-importance.png" alt="XGBoost feature importance ranking, topped by payment delinquency status, with no demographic feature in the top 15" loading="lazy" data-optional>
             <figcaption class="tag">XGBoost feature ranking. No demographic in the top 15.</figcaption>
@@ -230,11 +235,11 @@
     <p class="tag" style="margin:0 0 1.5rem">Open to work</p>
     <h2>Looking for Business Analyst roles in Ireland.</h2>
     <p>
-      Eligible for Stamp 1G graduate permission on completion of the MSc. On-site,
-      hybrid or remote.
+      On Stamp 2 student permission and eligible for Stamp 1G on completion of the MSc, which
+      permits full time employment for up to 24 months. On-site, hybrid or remote.
     </p>
     <div class="actions">
-      <a class="btn" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
+      <a class="btn btn--lead" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
       <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
       <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
     </div>

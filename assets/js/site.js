@@ -1,4 +1,7 @@
-/* srb1024.github.io : site behaviour*/
+/* Scroll behaviour and the image lightbox.
+   The pinned card stack is the only complicated part: cards stick under the
+   header and pass over one another, driven by four CSS variables per card
+   that this file recalculates on every scroll frame. */
 (function () {
   'use strict';
 
@@ -11,40 +14,58 @@
   var entries = work ? Array.prototype.slice.call(work.querySelectorAll('.entry')) : [];
 
   var stacked = false;
-  var dwellPx = 0;      /* last card's margin-bottom, measured when stacking is decided */
-  var STAGGER = 10;     /* px each card pins below the previous, keep in sync with CSS */
-  var FADE_PX = 220;    /* contents fade out over the last 220px of the next card's approach */
+  var dwellPx = 0;
+  var STAGGER = 10;    // px each card pins below the previous, matches the CSS
+  var FADE_PX = 220;   // card fades over the last 220px of the next one's approach
 
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
-  /* Where cards pin, in px, read from CSS so there's one source of truth */
+  // Read the pin offset from the CSS so there is one source of truth.
   function pinTop() {
     if (!entries.length) { return 88; }
     var t = parseFloat(getComputedStyle(entries[0]).top);
     return isNaN(t) ? 88 : t;
   }
 
-  /* Document-relative top of an element, ignoring sticky offset and transforms */
+  function tallest() {
+    var h = 0;
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].offsetHeight > h) { h = entries[i].offsetHeight; }
+    }
+    return h;
+  }
+
+  // Document-relative top, ignoring sticky offset and transforms.
   function flowTop(el) {
     var y = 0;
     while (el) { y += el.offsetTop; el = el.offsetParent; }
     return y;
   }
 
-  /* Decide whether the pinned stack is on */
+  // Pin only if every card fits on screen. Try normal spacing, then the
+  // compact tier, then give up and let the cards stack in flow.
   function evaluateStack() {
     if (!work || entries.length < 2) { return; }
     var want = !reduce && wide.matches;
 
     if (want) {
-      /* Apply the layout first so heights are measured in two-column form */
+
+      // Apply the layout first: heights differ once cards go two-column.
       work.classList.add('is-stacked');
+      work.classList.remove('is-tight');
       var avail = window.innerHeight - pinTop() - 24;
-      for (var i = 0; i < entries.length; i++) {
-        if (entries[i].offsetHeight > avail) { want = false; break; }
+
+      if (tallest() > avail) {
+
+        work.classList.add('is-tight');
+        if (tallest() > avail) {
+          work.classList.remove('is-tight');
+          want = false;
+        }
       }
     }
     work.classList.toggle('is-stacked', want);
+    if (!want) { work.classList.remove('is-tight'); }
 
     if (want) {
       var last = entries[entries.length - 1];
@@ -58,7 +79,7 @@
           el.classList.remove('reveal', 'is-shown');
           el.style.setProperty('--i', i);
         } else {
-          el.classList.add('reveal', 'is-shown');   /* visible, no scroll link */
+          el.classList.add('reveal', 'is-shown');
           el.style.removeProperty('--i');
           el.style.removeProperty('--enter');
           el.style.removeProperty('--cover');
@@ -72,16 +93,15 @@
     requestTick();
   }
 
-  /* Land on a card named in the URL hash */
-  /* Layout settles in stages (fonts, images), so landing is repeated on each
-     re-evaluation until the user touches the page or the page has been loaded
-     for a moment. After that it never yanks the scroll position again. */
   var hashLock = false;
   ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (ev) {
     window.addEventListener(ev, function () { hashLock = true; }, { passive: true, once: true });
   });
   window.addEventListener('load', function () { setTimeout(function () { hashLock = true; }, 1200); });
 
+  // A case study's back link names the card it came from, so land on that
+  // card rather than at the top of the section. Stops the moment the user
+  // scrolls, so it never fights them while the layout is still settling.
   function landOnHash() {
     if (hashLock || !location.hash) { return; }
     var target;
@@ -100,7 +120,6 @@
     hashLock = false; landOnHash(); hashLock = true;
   });
 
-  /*  Per-frame scroll work */
   var ticking = false;
   function tick() {
     ticking = false;
@@ -116,7 +135,7 @@
 
     if (stacked) {
       var pin = pinTop();
-      var workEnd = flowTop(work) + work.offsetHeight - y;   /* container bottom, viewport-relative */
+      var workEnd = flowTop(work) + work.offsetHeight - y;
       var tops = [];
       var i, el, h, vis;
 
@@ -132,6 +151,8 @@
       for (i = 0; i < entries.length; i++) {
         el = entries[i];
         var t = tops[i];
+        // enter: arriving from the bottom. cover: how far the next card has
+        // come over this one. fade: next card almost pinned, so this one goes.
         var enter = clamp01((vh - t.top) / Math.max(1, vh - (pin + i * STAGGER)));
         var cover = 0, fade = 0, exit = 0;
 
@@ -139,6 +160,7 @@
           cover = clamp01((t.top + t.h - tops[i + 1].top) / Math.max(1, t.h));
           var remaining = tops[i + 1].top - (pin + (i + 1) * STAGGER);
           fade = clamp01(1 - remaining / FADE_PX);
+        // Last card has no successor, so it fades out during its own hold.
         } else if (dwellPx > 0) {
           var slack = workEnd - (t.top + t.h);
           exit = clamp01(1 - slack / dwellPx);
@@ -157,7 +179,6 @@
   }
   window.addEventListener('scroll', requestTick, { passive: true });
 
-  /* Re-evaluate when sizes change */
   var resizeRaf = 0;
   function onResize() {
     if (resizeRaf) { return; }
@@ -172,8 +193,7 @@
   }
   window.addEventListener('load', onResize);
 
-  /* One-shot reveal for minor elements  */
-  evaluateStack();   /* must run first so cards know whether they're scroll-linked */
+  evaluateStack();
 
   var targets = Array.prototype.slice.call(document.querySelectorAll(
     '.entry, .band__head, .roles__side, .roles__main > p, .case__nav'
@@ -196,18 +216,16 @@
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  /*  Optional images  */
   function hideWrap(img) {
     var wrap = img.closest('[data-optional-wrap]') || img;
     wrap.hidden = true;
   }
+  // Images that are not in place yet hide themselves, caption and all.
   document.querySelectorAll('img[data-optional]').forEach(function (img) {
     img.addEventListener('error', function () { hideWrap(img); });
     if (img.complete && img.naturalWidth === 0) { hideWrap(img); }
   });
 
-
-  /* Lightbox for card images */
   (function () {
     var zoomables = Array.prototype.slice.call(
       document.querySelectorAll('.entry__shot img, .figure img')
@@ -244,7 +262,6 @@
       box.appendChild(closeBtn);
       document.body.appendChild(box);
 
-      /* Close on backdrop, on the image itself, or on the button */
       box.addEventListener('click', function (e) {
         if (e.target === box || e.target === big || closeBtn.contains(e.target)) { close(); }
       });
@@ -258,9 +275,9 @@
       big.addEventListener('load', fit);
     }
 
-    /* Size to the file's own pixels. Upscaling is allowed only as far as it
-       stays crisp: 1.5x on a standard screen, native size on a 2x screen,
-       and never past 92% of the viewport in either direction. */
+    // Size from the file's own pixels: 1.5x on a standard screen, native on a
+    // 2x screen, and never past the viewport. Small exports stay small rather
+    // than being blown up into mush.
     function fit() {
       var nw = big.naturalWidth, nh = big.naturalHeight;
       if (!nw || !nh) { return; }
@@ -299,7 +316,7 @@
       big.src = img.currentSrc || img.src;
       box.hidden = false;
       lockScroll();
-      /* two frames so the opacity transition actually runs */
+
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { box.classList.add('is-open'); });
       });

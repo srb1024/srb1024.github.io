@@ -1,22 +1,14 @@
-/* srb1024.github.io : palette from the background photograph
-
-   Samples assets/img/bg.jpg, finds its dominant colour and its strongest
-   secondary, and writes them into the CSS variables everything else is
-   built from. Swap the photograph and the whole site retunes itself.
-
-   Also measures the bright end of the image and sets a scrim behind the
-   text accordingly, so a light photograph does not leave white type
-   stranded.
-
-   The result is cached against the image URL, so only the first visit
-   does the work. If anything fails, the defaults in site.css stand. */
+/* Reads the palette out of the background photograph.
+   Samples the image, takes its dominant hue and the strongest hue away from
+   it, and writes them into the CSS colour tokens. Swap the photo and the
+   site retunes itself. Falls back to the values in site.css if anything here
+   fails. */
 (function () {
   'use strict';
 
-  var VERSION = 2;
+  var VERSION = 2;   // bump to discard palettes cached against the old image
   var ROOT = document.documentElement;
 
-  /*  colour helpers  */
   function rgbToHsl(r, g, b) {
     r /= 255; g /= 255; b /= 255;
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -63,16 +55,27 @@
   }
   function triplet(rgb) { return rgb.join(','); }
 
-  /*  apply and cache  */
   function apply(vars) {
     for (var k in vars) {
       if (Object.prototype.hasOwnProperty.call(vars, k)) {
         ROOT.style.setProperty(k, vars[k]);
       }
     }
+    paintIcon(vars['--blue-deep']);
   }
 
-  /*  read the photograph  */
+  function paintIcon(fill) {
+    var link = document.querySelector('link[rel="icon"]');
+    if (!fill || !link) { return; }
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>" +
+      "<rect width='64' height='64' rx='10' fill='" + fill + "'/>" +
+      "<text x='32' y='42' font-family='system-ui,sans-serif' font-size='22' " +
+      "font-weight='700' text-anchor='middle' fill='#ffffff'>SRB</text></svg>";
+    link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+
+  // Bin pixels by hue, weighted so vivid midtones count and the near-black
+  // background does not.
   function sample(img) {
     var W = 200;
     var H = Math.max(1, Math.round(img.naturalHeight * W / img.naturalWidth));
@@ -82,11 +85,11 @@
     ctx.drawImage(img, 0, 0, W, H);
     var px = ctx.getImageData(0, 0, W, H).data;
 
-    var BUCKETS = 36;                 
+    var BUCKETS = 36;
     var weight = new Array(BUCKETS).fill(0);
     var hSum = new Array(BUCKETS).fill(0);
     var sSum = new Array(BUCKETS).fill(0);
-    var hist = new Array(100).fill(0); /* luminance histogram, for the scrim */
+    var hist = new Array(100).fill(0);
     var total = 0, n = 0;
 
     for (var i = 0; i < px.length; i += 4) {
@@ -94,15 +97,14 @@
       hist[Math.min(99, Math.floor(lum([r, g, b]) * 100))] += 1; n += 1;
 
       var hsl = rgbToHsl(r, g, b), h = hsl[0], s = hsl[1], l = hsl[2];
-      /* skip near-black, near-white and washed-out pixels: the colour of a
-         photograph lives in its saturated midtones, not its background */
+
       if (l < 0.12 || l > 0.92 || s < 0.22) { continue; }
       var w = s * l;
       var idx = Math.min(BUCKETS - 1, Math.floor(h / (360 / BUCKETS)));
       weight[idx] += w; hSum[idx] += h * w; sSum[idx] += s * w;
       total += w;
     }
-    if (total < 12) { return null; }   /* monochrome or too dark to read */
+    if (total < 12) { return null; }
 
     function pick(exclude) {
       var best = -1, bestW = 0;
@@ -127,6 +129,8 @@
     var qs = q >= 0 ? Math.max(0.40, Math.min(0.80, sSum[q] / weight[q])) : ps * 0.8;
 
     var card = [16, 21, 30];
+    // Lift the link colour until it clears 4.5:1 on card glass, rather than
+    // trusting the photograph to be kind.
     var signal = hslToRgb(ph, ps * 0.78, 0.70);
     for (var L = 0.70; L <= 0.93 && contrast(signal, card) < 4.5; L += 0.02) {
       signal = hslToRgb(ph, ps * 0.78, L);
@@ -138,16 +142,18 @@
     var bright = hslToRgb(ph, ps, 0.62);
     var second = hslToRgb(qh, qs * 0.78, 0.64);
 
-    var acc = 0, bright = 1;
+    // Judge brightness on the top 8% of pixels, not the average: a dark photo
+    // with one hot spot still needs a veil where the text lands.
+    var acc = 0, topLum = 1;
     for (var k = 0; k < 100; k++) {
       acc += hist[k];
-      if (acc >= n * 0.92) { bright = (k + 0.5) / 100; break; }
+      if (acc >= n * 0.92) { topLum = (k + 0.5) / 100; break; }
     }
     var need = 0.183;
     var scrim = 0;
-    if (bright > need) {
+    if (topLum > need) {
       var want = Math.pow(need, 1 / 2.4) * 1.055 - 0.055;
-      var have = Math.pow(bright, 1 / 2.4) * 1.055 - 0.055;
+      var have = Math.pow(topLum, 1 / 2.4) * 1.055 - 0.055;
       scrim = Math.max(0, Math.min(0.62, 1 - want / have));
     }
 
@@ -167,7 +173,6 @@
     };
   }
 
-  /*  run  */
   function url() {
     var v = getComputedStyle(ROOT).getPropertyValue('--bg-src').trim();
     var m = v.match(/url\((['"]?)(.*?)\1\)/);
@@ -180,8 +185,9 @@
   try {
     var cached = localStorage.getItem(key);
     if (cached) { apply(JSON.parse(cached)); }
-  } catch (e) { /* private mode, no cache, no problem */ }
+  } catch (e) {  }
 
+  // Cached against the image URL, so only the first visit does the work.
   var img = new Image();
   img.decoding = 'async';
   img.onload = function () {
@@ -190,7 +196,11 @@
       if (!vars) { return; }
       apply(vars);
       try { localStorage.setItem(key, JSON.stringify(vars)); } catch (e2) {}
-    } catch (e3) { /* tainted canvas or no 2d context: defaults stand */ }
+    } catch (e3) {
+      // Tainted canvas, no 2d context, or a bug here: leave the site.css
+      // defaults in place, but say so rather than failing silently.
+      console.warn('theme.js could not read the palette:', e3);
+    }
   };
   img.src = src;
 })();

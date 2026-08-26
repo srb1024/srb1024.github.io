@@ -15,16 +15,17 @@
 <meta property="og:image" content="https://srb1024.github.io/assets/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESU%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101E33'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ESRB%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
-<!-- Applies the cached palette before first paint, so a return visit never
-     flashes the fallback colours. theme.js refreshes it in the background. -->
+
+<!-- Applies the cached palette before first paint so a return visit never
+     flashes the fallback colours. theme.js refreshes it after load. -->
 <script>
-(function(){try{var k='palette:1:'+getComputedStyle(document.documentElement).getPropertyValue('--bg-src').trim().replace(/url\((['"]?)(.*?)\1\)/,'$2');var v=localStorage.getItem(k);if(v){v=JSON.parse(v);for(var n in v){document.documentElement.style.setProperty(n,v[n]);}}}catch(e){}})();
+(function(){try{var k='palette:2:'+getComputedStyle(document.documentElement).getPropertyValue('--bg-src').trim().replace(/url\((['"]?)(.*?)\1\)/,'$2');var v=localStorage.getItem(k);if(v){v=JSON.parse(v);for(var n in v){document.documentElement.style.setProperty(n,v[n]);}}}catch(e){}})();
 </script>
 <script src="/assets/js/theme.js" defer></script>
 </head>
@@ -33,9 +34,11 @@
 
 <header class="masthead">
   <div class="shell masthead__inner">
-    <a class="wordmark" href="/">SAURABH UPADHYAY</a>
+    <a class="wordmark" href="/">Saurabh Upadhyay</a>
     <nav aria-label="Sections">
       <a href="#work">Work</a>
+
+      <!-- data-optional: dropped on narrow screens, three items crowd a phone -->
       <a href="#background" data-optional>Background</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -61,6 +64,7 @@
           <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
         </div>
       </div>
+
       <figure class="hero__portrait" data-optional-wrap>
         <img src="/assets/img/portrait.jpg" alt="Saurabh Upadhyay" width="416" height="416" fetchpriority="high" data-optional>
       </figure>
@@ -70,10 +74,12 @@
   <section class="band" id="work">
     <div class="shell">
       <div class="band__head">
-        <h2>Selected work</h2>
+        <h2>Work</h2>
         <p>Four projects. In each one the brief turned out to be asking the wrong question.</p>
       </div>
 
+      <!-- Card order here is the pin order. Each id is the target of a case
+           study's back link. -->
       <div class="work">
 
         <article class="entry" id="project-transport">
@@ -96,6 +102,7 @@
             </div>
           </dl>
 
+          <!-- Hides itself until the file is in place, see site.js -->
           <figure class="entry__shot" data-optional-wrap>
             <img src="/assets/img/transport-dashboard.png" alt="The EV adoption page of the dashboard, showing the forecast plateau against the 2030 target" loading="lazy" data-optional>
             <figcaption class="tag">EV adoption page of the live dashboard</figcaption>
@@ -114,8 +121,8 @@
             <li>Python</li><li>pandas</li><li>statsmodels</li><li>Streamlit</li><li>Plotly</li><li>Git</li>
           </ul>
           <div class="entry__links">
-            <a class="jump" href="https://ie-transports-decarbonization-tracker.streamlit.app/" target="_blank" rel="noopener">Live dashboard &rarr;</a>
-            <a class="jump" href="https://github.com/srb1024/IE_TRANSPORTs_DECARBONISATION_TRACKER" target="_blank" rel="noopener">Source code &rarr;</a>
+            <a class="btn" href="https://ie-transports-decarbonization-tracker.streamlit.app/" target="_blank" rel="noopener">Live dashboard <i>&rarr;</i></a>
+            <a class="btn" href="https://github.com/srb1024/IE_TRANSPORTs_DECARBONISATION_TRACKER" target="_blank" rel="noopener">Source code <i>&rarr;</i></a>
           </div>
         </article>
 
@@ -153,7 +160,7 @@
             <li>Python</li><li>scikit-learn</li><li>XGBoost</li><li>SHAP</li><li>LIME</li>
           </ul>
           <div class="entry__links">
-            <a class="jump" href="/projects/churn/">Read the approach &rarr;</a>
+            <a class="btn" href="/projects/churn/">Read the approach <i>&rarr;</i></a>
           </div>
         </article>
 
@@ -192,7 +199,7 @@
             <li>Python</li><li>PuLP</li><li>NetworkX</li><li>SciPy</li><li>Monte Carlo</li>
           </ul>
           <div class="entry__links">
-            <a class="jump" href="/projects/supply-chain/">Read the approach &rarr;</a>
+            <a class="btn" href="/projects/supply-chain/">Read the approach <i>&rarr;</i></a>
           </div>
         </article>
 
@@ -231,7 +238,7 @@
             <li>User research</li><li>Journey mapping</li><li>Service blueprints</li><li>Figma</li>
           </ul>
           <div class="entry__links">
-            <a class="jump" href="https://earth-folk-30984861.figma.site/" target="_blank" rel="noopener">Open the prototype &rarr;</a>
+            <a class="btn" href="https://earth-folk-30984861.figma.site/" target="_blank" rel="noopener">Open the prototype <i>&rarr;</i></a>
           </div>
         </article>
 
@@ -242,24 +249,29 @@
   <section class="band" id="background">
     <div class="shell">
       <div class="band__head">
-        <h2>Before this</h2>
-        <p>Payroll, HR and accounting automation software.</p>
+        <h2>How I got here</h2>
+        <p>Computer Science, Software Delivery and then Analytics.</p>
       </div>
-      <div class="roles">
+
+      <div class="roles__card">
+        <div class="roles">
         <div class="roles__side">
-          <p class="tag">Sage · Mohali, India</p>
-          <h3>Software delivery</h3>
-          <div class="stint">
-            <p>Software Test Engineer</p>
-            <p class="tag">Oct 2023 to Jun 2025</p>
-          </div>
-          <div class="stint">
-            <p>Associate Software Test Engineer</p>
-            <p class="tag">Oct 2021 to Oct 2023</p>
-          </div>
+          <p class="tag">The route in</p>
           <div class="stint">
             <p>MSc Business Analytics</p>
             <p class="tag">University College Cork · 2025 to 2026</p>
+          </div>
+          <div class="stint">
+            <p>Software Test Engineer</p>
+            <p class="tag">Sage · Oct 2023 to Jun 2025</p>
+          </div>
+          <div class="stint">
+            <p>Associate Software Test Engineer</p>
+            <p class="tag">Sage · Oct 2021 to Oct 2023</p>
+          </div>
+          <div class="stint">
+            <p>BTech, Computer Science</p>
+            <p class="tag">Lovely Professional University · 2017 to 2021</p>
           </div>
         </div>
         <div class="roles__main">
@@ -286,6 +298,7 @@
             projected reduction in turnaround time of around 20 percent.
           </p>
         </div>
+        </div>
       </div>
     </div>
   </section>
@@ -294,16 +307,19 @@
 
 <footer class="closing" id="contact">
   <div class="shell">
-    <p class="tag" style="margin:0 0 1.5rem">Open to work</p>
-    <h2>Looking for Business Analyst roles in Ireland.</h2>
-    <p>
-      Eligible for Stamp 1G graduate permission on completion of the MSc. On-site,
-      hybrid or remote.
-    </p>
-    <div class="actions">
-      <a class="btn" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
-      <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
-      <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
+
+    <div class="closing__card">
+      <p class="tag">Open to work</p>
+      <h2>Looking for Business Analyst roles in Ireland.</h2>
+      <p>
+        On Stamp 2 student permission and eligible for Stamp 1G on completion of the MSc, which
+        permits full time employment for up to 24 months. On-site, hybrid or remote.
+      </p>
+      <div class="actions">
+        <a class="btn btn--lead" href="mailto:srb102499@outlook.com">srb102499@outlook.com <i>&rarr;</i></a>
+        <a class="btn" href="https://www.linkedin.com/in/srb1024" target="_blank" rel="noopener">LinkedIn <i>&rarr;</i></a>
+        <a class="btn" href="https://github.com/srb1024" target="_blank" rel="noopener">GitHub <i>&rarr;</i></a>
+      </div>
     </div>
     <div class="colophon">
       <span>&copy; 2026 Saurabh Upadhyay</span>
