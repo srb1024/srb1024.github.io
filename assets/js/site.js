@@ -354,5 +354,13 @@
     });
   })();
 
+  (function () {
+    var el = document.querySelector('[data-updated]');
+    if (!el) { return; }
+    var d = new Date(document.lastModified);
+    if (isNaN(d) || Math.abs(Date.now() - d.getTime()) < 60000) { return; }
+    el.textContent = 'Last updated ' + d.toLocaleDateString('en-IE', { month: 'long', year: 'numeric' });
+  })();
+
   requestTick();
 })();
